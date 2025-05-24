@@ -1,1 +1,636 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalistyczne Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary: #7b2cbf;
+            --secondary: #9d4edd;
+            --accent: #c77dff;
+            --card-bg: #1e1e1e;
+            --transition: all 0.3s ease;
+        }
 
+        .light-theme {
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --primary: #7b2cbf;
+            --secondary: #9d4edd;
+            --accent: #c77dff;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        header {
+            padding: 2rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(123, 44, 191, 0.2);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            color: var(--accent);
+            transform: rotate(30deg);
+        }
+
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(123, 44, 191, 0.4);
+        }
+
+        .projects {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(123, 44, 191, 0.2);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .project-description {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background-color: rgba(123, 44, 191, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: var(--transition);
+        }
+
+        .project-links a:hover {
+            color: var(--accent);
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 50%;
+            right: -250px;
+            transform: translateY(-50%);
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px 0 0 10px;
+            box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .settings-panel.open {
+            right: 0;
+        }
+
+        .settings-toggle {
+            position: absolute;
+            left: -40px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            border-radius: 10px 0 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .settings-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .theme-options {
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .theme-option input {
+            margin-right: 0.5rem;
+        }
+
+        .color-picker {
+            margin-top: 1rem;
+        }
+
+        .color-picker label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .color-inputs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .color-input {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--card-bg);
+            transition: var(--transition);
+        }
+
+        .color-input:hover {
+            transform: scale(1.1);
+        }
+
+        .color-input.active {
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 0 2px var(--bg-color);
+        }
+
+        footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(123, 44, 191, 0.2);
+            margin-top: 3rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-panel {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="#" class="logo">Portfolio</a>
+            <nav class="nav-links">
+                <a href="#projects">Projekty</a>
+                <a href="#about">O mnie</a>
+                <a href="#contact">Kontakt</a>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1>Minimalistyczne Portfolio</h1>
+            <p>Witaj w moim cyfrowym portfolio. Poniżej znajdziesz wybrane projekty, nad którymi pracowałem. Każdy projekt zawiera szczegółowy opis i technologie.</p>
+            <a href="#projects" class="btn">Zobacz Projekty</a>
+        </section>
+
+        <section class="projects" id="projects">
+            <h2 class="section-title">Moje Projekty</h2>
+            <div class="projects-grid">
+                <!-- Projekt 1 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/7b2cbf/ffffff?text=Project+1" alt="Projekt 1" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Aplikacja E-Commerce</h3>
+                        <p class="project-description">Pełnoprawna platforma e-commerce z systemem płatności, koszykiem i panelem administracyjnym. Zoptymalizowana pod kątem wydajności i UX.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projekt 2 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/9d4edd/ffffff?text=Project+2" alt="Projekt 2" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">System Zarządzania Treścią</h3>
+                        <p class="project-description">Niestandardowy CMS dla klientów z branży kreatywnej. Intuicyjny edytor drag-and-drop, wielojęzyczność i zaawansowane SEO.</p>
+                        <div class="project-tags">
+                            <span class="tag">PHP</span>
+                            <span class="tag">Laravel</span>
+                            <span class="tag">Vue.js</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projekt 3 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/c77dff/ffffff?text=Project+3" alt="Projekt 3" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Aplikacja Mobilna Fitness</h3>
+                        <p class="project-description">Aplikacja do śledzenia treningów z integracją wearables, spersonalizowanymi planami i społecznościowymi funkcjami motywacyjnymi.</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">Firebase</span>
+                            <span class="tag">Redux</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projekt 4 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/7b2cbf/ffffff?text=Project+4" alt="Projekt 4" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Analiza Danych w Czasie Rzeczywistym</h3>
+                        <p class="project-description">Dashboard do wizualizacji dużych zbiorów danych z możliwością filtrowania, eksportu i alertów w czasie rzeczywistym.</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">D3.js</span>
+                            <span class="tag">AWS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projekt 5 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/9d4edd/ffffff?text=Project+5" alt="Projekt 5" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Platforma Edukacyjna</h3>
+                        <p class="project-description">System do zarządzania kursami online z wideokonferencjami, testami i certyfikatami. Wsparcie dla instruktorów i uczniów.</p>
+                        <div class="project-tags">
+                            <span class="tag">Django</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">WebRTC</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projekt 6 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/600x400/c77dff/ffffff?text=Project+6" alt="Projekt 6" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Generator Portfolio</h3>
+                        <p class="project-description">Narzędzie do tworzenia spersonalizowanych portfolio z szablonami, hostingiem i integracją z LinkedIn/GitHub.</p>
+                        <div class="project-tags">
+                            <span class="tag">Next.js</span>
+                            <span class="tag">Tailwind CSS</span>
+                            <span class="tag">Stripe</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Live Demo</a>
+                            <a href="#"><i class="fab fa-github"></i> Kod Źródłowy</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="settings-panel" id="settingsPanel">
+            <div class="settings-toggle" id="settingsToggle">
+                <i class="fas fa-cog"></i>
+            </div>
+            <h3 class="settings-title">Ustawienia Strony</h3>
+            
+            <div class="theme-options">
+                <h4>Motyw:</h4>
+                <div class="theme-option">
+                    <input type="radio" id="darkTheme" name="theme" value="dark" checked>
+                    <label for="darkTheme">Ciemny</label>
+                </div>
+                <div class="theme-option">
+                    <input type="radio" id="lightTheme" name="theme" value="light">
+                    <label for="lightTheme">Jasny</label>
+                </div>
+            </div>
+            
+            <div class="color-picker">
+                <h4>Kolory akcentów:</h4>
+                <div class="color-inputs">
+                    <div class="color-input active" style="background-color: #7b2cbf;" data-color="#7b2cbf"></div>
+                    <div class="color-input" style="background-color: #3a0ca3;" data-color="#3a0ca3"></div>
+                    <div class="color-input" style="background-color: #7209b7;" data-color="#7209b7"></div>
+                    <div class="color-input" style="background-color: #4361ee;" data-color="#4361ee"></div>
+                    <div class="color-input" style="background-color: #4cc9f0;" data-color="#4cc9f0"></div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p class="copyright">© 2023 Minimalistyczne Portfolio. Wszystkie prawa zastrzeżone.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Przełączanie motywu
+            const themeToggle = document.getElementById('themeToggle');
+            const body = document.body;
+            
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('light-theme');
+                
+                if (body.classList.contains('light-theme')) {
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+            });
+            
+            // Panel ustawień
+            const settingsToggle = document.getElementById('settingsToggle');
+            const settingsPanel = document.getElementById('settingsPanel');
+            
+            settingsToggle.addEventListener('click', function() {
+                settingsPanel.classList.toggle('open');
+            });
+            
+            // Zmiana koloru akcentów
+            const colorInputs = document.querySelectorAll('.color-input');
+            
+            colorInputs.forEach(input => {
+                input.addEventListener('click', function() {
+                    // Usuń klasę active ze wszystkich
+                    colorInputs.forEach(i => i.classList.remove('active'));
+                    // Dodaj klasę active do klikniętego
+                    this.classList.add('active');
+                    
+                    // Pobierz nowy kolor
+                    const newColor = this.getAttribute('data-color');
+                    
+                    // Zaktualizuj zmienne CSS
+                    document.documentElement.style.setProperty('--primary', newColor);
+                    
+                    // Oblicz i ustaw kolory pochodne
+                    const secondary = lightenColor(newColor, 20);
+                    const accent = lightenColor(newColor, 40);
+                    
+                    document.documentElement.style.setProperty('--secondary', secondary);
+                    document.documentElement.style.setProperty('--accent', accent);
+                });
+            });
+            
+            // Funkcja do rozjaśniania koloru
+            function lightenColor(color, percent) {
+                const num = parseInt(color.replace("#", ""), 16);
+                const amt = Math.round(2.55 * percent);
+                const R = (num >> 16) + amt;
+                const G = (num >> 8 & 0x00FF) + amt;
+                const B = (num & 0x0000FF) + amt;
+                
+                return "#" + (
+                    0x1000000 +
+                    (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+                    (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+                    (B < 255 ? (B < 1 ? 0 : B) : 255)
+                ).toString(16).slice(1);
+            }
+            
+            // Przełączanie motywu z panelu ustawień
+            const themeRadios = document.querySelectorAll('input[name="theme"]');
+            
+            themeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'light') {
+                        body.classList.add('light-theme');
+                        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    } else {
+                        body.classList.remove('light-theme');
+                        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
