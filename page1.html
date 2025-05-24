@@ -7,48 +7,101 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
+      background-color: #121212;
+      color: #fff;
       margin: 0;
+      display: flex;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 40px;
     }
 
     .countdown {
-      background: white;
-      border-radius: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      padding: 20px 30px;
-      margin: 20px 0;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
+      background: #1e1e1e;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
     .title {
       font-size: 1.5em;
       margin-bottom: 10px;
-      color: #333;
     }
 
     .timer {
       font-size: 1.2em;
-      color: #555;
+      color: #ccc;
+    }
+
+    .sidebar {
+      width: 300px;
+      background-color: #2a2a2a;
+      padding: 20px;
+      border-left: 2px solid #444;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    .sidebar select,
+    .sidebar input,
+    .sidebar button {
+      width: 100%;
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+
+    .sidebar button {
+      background-color: #3f51b5;
+      color: white;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: #5c6bc0;
     }
   </style>
 </head>
 <body>
-  <h1 style="color:#fff;">Odliczanie do ważnych wydarzeń</h1>
+  <div class="main-content">
+    <h1>Odliczanie do wydarzeń</h1>
 
-  <div class="countdown">
-    <div class="title">Koniec roku szkolnego</div>
-    <div class="timer" id="schoolCountdown"></div>
+    <div class="countdown">
+      <div class="title">Koniec roku szkolnego</div>
+      <div class="timer" id="schoolCountdown"></div>
+    </div>
+
+    <div class="countdown">
+      <div class="title">Święta Bożego Narodzenia</div>
+      <div class="timer" id="christmasCountdown"></div>
+    </div>
+
+    <div class="countdown" id="customCountdownBox" style="display:none;">
+      <div class="title" id="customTitle"></div>
+      <div class="timer" id="customCountdown"></div>
+    </div>
   </div>
 
-  <div class="countdown">
-    <div class="title">Święta Bożego Narodzenia</div>
-    <div class="timer" id="christmasCountdown"></div>
+  <div class="sidebar">
+    <h2>Wybierz wydarzenie</h2>
+    <select id="eventSelect" onchange="toggleCustomInput()">
+      <option value="school">Koniec roku szkolnego</option>
+      <option value="christmas">Święta Bożego Narodzenia</option>
+      <option value="custom">Własne wydarzenie</option>
+    </select>
+
+    <input type="text" id="customName" placeholder="Nazwa wydarzenia" style="display:none;" />
+    <input type="datetime-local" id="customDate" style="display:none;" />
+    <button onclick="setCustomCountdown()">Dodaj odliczanie</button>
   </div>
 
   <script>
@@ -70,6 +123,24 @@
         `${days} dni, ${hours} godz, ${minutes} min, ${seconds} sek`;
     }
 
+    function toggleCustomInput() {
+      const select = document.getElementById("eventSelect").value;
+      const show = select === "custom";
+      document.getElementById("customName").style.display = show ? "block" : "none";
+      document.getElementById("customDate").style.display = show ? "block" : "none";
+    }
+
+    function setCustomCountdown() {
+      const name = document.getElementById("customName").value;
+      const date = document.getElementById("customDate").value;
+      if (!name || !date) return;
+
+      document.getElementById("customTitle").textContent = name;
+      document.getElementById("customCountdownBox").style.display = "block";
+      setInterval(() => updateCountdown("customCountdown", date), 1000);
+    }
+
+    // Start default countdowns
     setInterval(() => {
       updateCountdown("schoolCountdown", "2025-06-21T00:00:00");
       updateCountdown("christmasCountdown", "2025-12-25T00:00:00");
