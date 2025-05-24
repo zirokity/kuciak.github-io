@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Odliczanie</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      margin: 0;
+    }
+
+    .countdown {
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 20px 30px;
+      margin: 20px 0;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .timer {
+      font-size: 1.2em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1 style="color:#fff;">Odliczanie do ważnych wydarzeń</h1>
+
+  <div class="countdown">
+    <div class="title">Koniec roku szkolnego</div>
+    <div class="timer" id="schoolCountdown"></div>
+  </div>
+
+  <div class="countdown">
+    <div class="title">Święta Bożego Narodzenia</div>
+    <div class="timer" id="christmasCountdown"></div>
+  </div>
+
+  <script>
+    function updateCountdown(id, targetDate) {
+      const now = new Date();
+      const distance = new Date(targetDate) - now;
+
+      if (distance < 0) {
+        document.getElementById(id).textContent = "To wydarzenie już minęło!";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((distance / (1000 * 60)) % 60);
+      const seconds = Math.floor((distance / 1000) % 60);
+
+      document.getElementById(id).textContent =
+        `${days} dni, ${hours} godz, ${minutes} min, ${seconds} sek`;
+    }
+
+    setInterval(() => {
+      updateCountdown("schoolCountdown", "2025-06-21T00:00:00");
+      updateCountdown("christmasCountdown", "2025-12-25T00:00:00");
+    }, 1000);
+  </script>
+</body>
+</html>
