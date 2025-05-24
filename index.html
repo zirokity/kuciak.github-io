@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moje Linki | Dark Style</title>
+    <title>Kuciak Linki</title>
+    <meta property="og:title" content="Kuciak Linki">
+    <meta property="og:description" content="Wszystkie moje ważne linki w jednym miejscu">
+    <meta property="og:image" content="img/profile.jpg"> <!-- Zmień na swój obrazek -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -61,6 +64,7 @@
             border: 4px solid var(--primary);
             box-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
             transition: all 0.3s ease;
+            background-color: #2d3436; /* Kolor tła jeśli obrazek się nie załaduje */
         }
         
         .profile-img:hover {
@@ -81,6 +85,7 @@
             margin-top: 0.5rem;
             opacity: 0.8;
             font-size: 0.9rem;
+            font-style: italic;
         }
         
         .links {
@@ -100,9 +105,16 @@
             gap: 1rem;
             text-decoration: none;
             color: var(--light);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .link.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .link::before {
@@ -117,10 +129,14 @@
         }
         
         .link:hover {
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
             background: rgba(255, 255, 255, 0.1);
             border-color: var(--primary);
+        }
+        
+        .link.visible:hover {
+            transform: translateY(-3px) scale(1.02);
         }
         
         .link:hover::before {
@@ -137,6 +153,12 @@
             justify-content: center;
             background: rgba(108, 92, 231, 0.2);
             flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .link:hover .link-icon {
+            transform: scale(1.1);
+            background: rgba(108, 92, 231, 0.3);
         }
         
         .link-content {
@@ -146,12 +168,16 @@
         .link-title {
             font-weight: 600;
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .link-desc {
             font-size: 0.8rem;
             opacity: 0.7;
             margin-top: 0.2rem;
+            transition: all 0.3s ease;
         }
         
         .social-links {
@@ -165,17 +191,33 @@
             color: var(--light);
             font-size: 1.5rem;
             transition: all 0.3s ease;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .social-link.visible {
+            transform: translateY(0);
+            opacity: 1;
         }
         
         .social-link:hover {
             color: var(--primary);
-            transform: translateY(-3px);
+            transform: translateY(-3px) scale(1.1);
+        }
+        
+        .social-link.visible:hover {
+            transform: translateY(-3px) scale(1.1);
         }
         
         footer {
             text-align: center;
             margin-top: 3rem;
             font-size: 0.8rem;
+            opacity: 0;
+            transition: all 0.5s ease 0.8s;
+        }
+        
+        footer.visible {
             opacity: 0.6;
         }
         
@@ -184,12 +226,6 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        .link:nth-child(1) { animation: fadeIn 0.5s ease 0.1s both; }
-        .link:nth-child(2) { animation: fadeIn 0.5s ease 0.2s both; }
-        .link:nth-child(3) { animation: fadeIn 0.5s ease 0.3s both; }
-        .link:nth-child(4) { animation: fadeIn 0.5s ease 0.4s both; }
-        .link:nth-child(5) { animation: fadeIn 0.5s ease 0.5s both; }
         
         /* Floating animation */
         @keyframes float {
@@ -206,7 +242,7 @@
             text-shadow: 0 0 10px rgba(108, 92, 231, 0.7);
         }
         
-        /* Email display - initially hidden */
+        /* Email display */
         .email-display {
             background: rgba(0, 206, 201, 0.1);
             border: 1px solid var(--accent);
@@ -216,10 +252,19 @@
             font-family: 'Courier New', monospace;
             position: relative;
             overflow: hidden;
-            display: none; /* Initially hidden */
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            animation: fadeIn 0.5s ease;
+        }
+        
+        .email-display.show {
+            max-height: 100px;
+            opacity: 1;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
         }
         
         .email-text {
@@ -256,6 +301,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+            font-weight: bold;
         }
         
         .copied-message.show {
@@ -318,13 +364,13 @@
     
     <div class="container">
         <div class="profile">
-            <img src="https://via.placeholder.com/150" alt="Profile" class="profile-img floating">
+            <img src="img/profile.jpg" alt="Kuciak" class="profile-img floating">
             <h1 class="glow">Kuciak</h1>
-            <p>Twórca treści | Fotograf | Podróżnik</p>
+            <p>Na oko to chłop w szpitalu umarł</p>
         </div>
         
         <div class="links">
-            <!-- Contact link moved to top -->
+            <!-- Contact link -->
             <a href="#" class="link" id="contact-link">
                 <div class="link-icon">
                     <i class="fas fa-envelope"></i>
@@ -341,25 +387,25 @@
                 <i class="fas fa-chevron-right"></i>
             </a>
             
-            <!-- Other links marked as under construction -->
+            <!-- Other links -->
             <a href="#" class="link">
                 <div class="link-icon">
                     <i class="fab fa-youtube"></i>
                 </div>
                 <div class="link-content">
-                    <div class="link-title">Mój kanał YouTube <i class="fas fa-hammer construction"></i></div>
+                    <div class="link-title">Krótki metraż <i class="fas fa-hammer construction"></i></div>
                     <div class="link-desc">W przebudowie - dostępny wkrótce!</div>
                 </div>
                 <i class="fas fa-chevron-right"></i>
             </a>
             
-            <a href="#" class="link">
+            <a href="https://twojastrona.com" class="link" target="_blank"> <!-- Tutaj dodaj link do swojej 2 strony -->
                 <div class="link-icon">
-                    <i class="fab fa-instagram"></i>
+                    <i class="fas fa-globe"></i>
                 </div>
                 <div class="link-content">
-                    <div class="link-title">Instagram <i class="fas fa-hammer construction"></i></div>
-                    <div class="link-desc">W przebudowie - dostępny wkrótce!</div>
+                    <div class="link-title">Moja strona</div>
+                    <div class="link-desc">Odwiedź moją główną stronę</div>
                 </div>
                 <i class="fas fa-chevron-right"></i>
             </a>
@@ -369,7 +415,7 @@
                     <i class="fas fa-store"></i>
                 </div>
                 <div class="link-content">
-                    <div class="link-title">Mój sklep <i class="fas fa-hammer construction"></i></div>
+                    <div class="link-title">Kram <i class="fas fa-hammer construction"></i></div>
                     <div class="link-desc">W przebudowie - dostępny wkrótce!</div>
                 </div>
                 <i class="fas fa-chevron-right"></i>
@@ -380,7 +426,7 @@
                     <i class="fas fa-book"></i>
                 </div>
                 <div class="link-content">
-                    <div class="link-title">Blog <i class="fas fa-hammer construction"></i></div>
+                    <div class="link-title">Zapisków chaos <i class="fas fa-hammer construction"></i></div>
                     <div class="link-desc">W przebudowie - dostępny wkrótce!</div>
                 </div>
                 <i class="fas fa-chevron-right"></i>
@@ -401,15 +447,14 @@
     </div>
     
     <script>
-        // Particles.js configuration
         document.addEventListener('DOMContentLoaded', function() {
+            // Particles.js configuration
             const canvas = document.getElementById('particles-js');
             const ctx = canvas.getContext('2d');
             
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             
-            // Particle class
             class Particle {
                 constructor() {
                     this.x = Math.random() * canvas.width;
@@ -436,13 +481,11 @@
                 }
             }
             
-            // Create particles
             const particles = [];
             for (let i = 0; i < 100; i++) {
                 particles.push(new Particle());
             }
             
-            // Animation loop
             function animate() {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 
@@ -451,7 +494,6 @@
                     particles[i].draw();
                 }
                 
-                // Connect particles
                 for (let i = 0; i < particles.length; i++) {
                     for (let j = i; j < particles.length; j++) {
                         const dx = particles[i].x - particles[j].x;
@@ -474,7 +516,6 @@
             
             animate();
             
-            // Resize handler
             window.addEventListener('resize', function() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
@@ -489,11 +530,10 @@
             if (contactLink && emailDisplay) {
                 contactLink.addEventListener('click', function(e) {
                     e.preventDefault();
-                    emailDisplay.style.display = emailDisplay.style.display === 'flex' ? 'none' : 'flex';
+                    emailDisplay.classList.toggle('show');
                     
-                    // Change description text
                     const desc = this.querySelector('.link-desc');
-                    if (emailDisplay.style.display === 'flex') {
+                    if (emailDisplay.classList.contains('show')) {
                         desc.textContent = 'Twój email jest teraz widoczny poniżej';
                     } else {
                         desc.textContent = 'Kliknij aby pokazać email';
@@ -504,7 +544,7 @@
             // Email copy functionality
             if (copyBtn && copiedMessage) {
                 copyBtn.addEventListener('click', function(e) {
-                    e.stopPropagation(); // Prevent triggering the contact link click
+                    e.stopPropagation();
                     const email = 'fajaujebanatowarem@protonmail.com';
                     navigator.clipboard.writeText(email).then(() => {
                         copiedMessage.classList.add('show');
@@ -515,13 +555,44 @@
                 });
             }
             
-            // Prevent other links from doing anything
-            const otherLinks = document.querySelectorAll('.link:not(#contact-link)');
+            // Prevent other links from doing anything (except the new website link)
+            const otherLinks = document.querySelectorAll('.link:not(#contact-link):not([href^="http"])');
             otherLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                 });
             });
+            
+            // Animate elements on page load
+            const animateElements = () => {
+                const links = document.querySelectorAll('.link');
+                const socialLinks = document.querySelectorAll('.social-link');
+                const footer = document.querySelector('footer');
+                
+                // Animate links with cascade effect
+                links.forEach((link, index) => {
+                    setTimeout(() => {
+                        link.classList.add('visible');
+                    }, 150 * index);
+                });
+                
+                // Animate social links with slight delay
+                setTimeout(() => {
+                    socialLinks.forEach((link, index) => {
+                        setTimeout(() => {
+                            link.classList.add('visible');
+                        }, 100 * index);
+                    });
+                }, links.length * 150 + 200);
+                
+                // Show footer last
+                setTimeout(() => {
+                    footer.classList.add('visible');
+                }, links.length * 150 + socialLinks.length * 100 + 500);
+            };
+            
+            // Start animations after short delay
+            setTimeout(animateElements, 300);
         });
     </script>
 </body>
