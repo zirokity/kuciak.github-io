@@ -1,169 +1,995 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Odliczanie</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    h1 {
-      margin: 20px 0;
-    }
-
-    .countdown-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-    }
-
-    .countdown {
-      background: #1e1e1e;
-      border-radius: 20px;
-      padding: 20px;
-      width: 300px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      transition: transform 0.3s;
-    }
-
-    .countdown:hover {
-      transform: scale(1.05);
-    }
-
-    .countdown h2 {
-      margin-top: 0;
-    }
-
-    .timer {
-      font-size: 1.2em;
-      color: #ccc;
-    }
-
-    .add-countdown {
-      background: #2a2a2a;
-      border-radius: 20px;
-      padding: 20px;
-      width: 300px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      margin: 20px;
-    }
-
-    .add-countdown input, .add-countdown button {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-    }
-
-    .add-countdown button {
-      background-color: #3f51b5;
-      color: white;
-      cursor: pointer;
-    }
-
-    .add-countdown button:hover {
-      background-color: #5c6bc0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Countdown | Odliczanie do ważnych wydarzeń</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .main-countdown {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+            animation: slideUp 0.8s ease-in-out;
+        }
+        
+        .main-countdown:hover {
+            transform: translateY(-5px);
+        }
+        
+        .countdown-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #fff;
+        }
+        
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-item {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem 1rem;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        .countdown-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #a1c4fd 0%, #c2e9fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .countdown-label {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+        
+        .custom-countdowns {
+            margin-top: 4rem;
+            animation: fadeIn 1s ease-in-out 0.3s both;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+            border-radius: 3px;
+        }
+        
+        .countdown-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .countdown-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .countdown-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .card-date {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+        
+        .card-countdown {
+            display: flex;
+            gap: 0.8rem;
+            justify-content: center;
+        }
+        
+        .card-countdown-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 0.8rem 0.5rem;
+            min-width: 70px;
+            text-align: center;
+        }
+        
+        .card-countdown-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #a1c4fd;
+        }
+        
+        .card-countdown-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+        }
+        
+        .add-countdown {
+            text-align: center;
+            margin-top: 3rem;
+            animation: fadeIn 1s ease-in-out 0.6s both;
+        }
+        
+        .add-btn {
+            background: linear-gradient(45deg, var(--warning), var(--accent));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .add-btn:active {
+            transform: translateY(0);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: white;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(45deg, var(--success), var(--accent));
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .share-section {
+            margin-top: 2rem;
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            animation: fadeIn 1s ease-in-out 0.9s both;
+        }
+        
+        .share-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .share-input-group {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .share-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border-radius: 8px 0 0 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+        
+        .share-btn {
+            padding: 0 1.2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .share-btn:hover {
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+        
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn.facebook {
+            background: #3b5998;
+        }
+        
+        .social-btn.twitter {
+            background: #1da1f2;
+        }
+        
+        .social-btn.whatsapp {
+            background: #25d366;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 2rem 0;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            animation: fadeIn 1s ease-in-out 1.2s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shine {
+            0% { transform: rotate(30deg) translate(-10%, -10%); }
+            100% { transform: rotate(30deg) translate(10%, 10%); }
+        }
+        
+        /* Responsywność */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .countdown-container {
+                gap: 1rem;
+            }
+            
+            .countdown-item {
+                min-width: 80px;
+                padding: 1rem 0.5rem;
+            }
+            
+            .countdown-value {
+                font-size: 2rem;
+            }
+            
+            .countdown-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <h1>Odliczanie do wydarzeń</h1>
-
-  <div class="countdown-container" id="countdownContainer">
-    <!-- Odliczania będą tutaj dodawane dynamicznie -->
-  </div>
-
-  <div class="add-countdown">
-    <h2>Dodaj własne odliczanie</h2>
-    <input type="text" id="eventName" placeholder="Nazwa wydarzenia" />
-    <input type="datetime-local" id="eventDate" />
-    <button onclick="addCustomCountdown()">Dodaj odliczanie</button>
-  </div>
-
-  <script>
-    const countdownContainer = document.getElementById('countdownContainer');
-
-    function createCountdownElement(title, targetDate, id) {
-      const countdownDiv = document.createElement('div');
-      countdownDiv.className = 'countdown';
-      countdownDiv.id = id;
-
-      const titleElement = document.createElement('h2');
-      titleElement.textContent = title;
-
-      const timerElement = document.createElement('div');
-      timerElement.className = 'timer';
-
-      countdownDiv.appendChild(titleElement);
-      countdownDiv.appendChild(timerElement);
-      countdownContainer.appendChild(countdownDiv);
-
-      function updateCountdown() {
-        const now = new Date();
-        const distance = new Date(targetDate) - now;
-
-        if (distance < 0) {
-          timerElement.textContent = "To wydarzenie już minęło!";
-          return;
-        }
-
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((distance / (1000 * 60)) % 60);
-        const seconds = Math.floor((distance / 1000) % 60);
-
-        timerElement.textContent =
-          `${days} dni, ${hours} godz, ${minutes} min, ${seconds} sek`;
-      }
-
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    }
-
-    function addCustomCountdown() {
-      const name = document.getElementById('eventName').value;
-      const date = document.getElementById('eventDate').value;
-      if (!name || !date) return;
-
-      const id = 'countdown_' + Date.now();
-      createCountdownElement(name, date, id);
-
-      // Zapisz do localStorage
-      const countdowns = JSON.parse(localStorage.getItem('customCountdowns')) || [];
-      countdowns.push({ id, name, date });
-      localStorage.setItem('customCountdowns', JSON.stringify(countdowns));
-
-      // Wyczyść pola
-      document.getElementById('eventName').value = '';
-      document.getElementById('eventDate').value = '';
-    }
-
-    function loadCountdowns() {
-      // Dodaj domyślne odliczania
-      createCountdownElement('Koniec roku szkolnego', '2025-06-21T00:00:00', 'schoolCountdown');
-      createCountdownElement('Święta Bożego Narodzenia', '2025-12-25T00:00:00', 'christmasCountdown');
-
-      // Załaduj zapisane odliczania
-      const countdowns = JSON.parse(localStorage.getItem('customCountdowns')) || [];
-      countdowns.forEach(cd => {
-        createCountdownElement(cd.name, cd.date, cd.id);
-      });
-    }
-
-    loadCountdowns();
-  </script>
+    <div id="particles-js" class="particles"></div>
+    
+    <div class="container">
+        <header>
+            <h1>Magic Countdown</h1>
+            <p class="subtitle">Odliczaj czas do najważniejszych wydarzeń w Twoim życiu</p>
+        </header>
+        
+        <div class="main-countdown">
+            <h2 class="countdown-title">Do Wakacji 2024 Pozostało:</h2>
+            <div class="countdown-container" id="main-countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">00</div>
+                    <div class="countdown-label">Dni</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">00</div>
+                    <div class="countdown-label">Godzin</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">00</div>
+                    <div class="countdown-label">Minut</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">00</div>
+                    <div class="countdown-label">Sekund</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="custom-countdowns">
+            <h2 class="section-title">Twoje Odliczania</h2>
+            <div class="countdown-cards" id="custom-countdowns">
+                <!-- Tutaj będą dodawane dynamicznie odliczania użytkownika -->
+            </div>
+            
+            <div class="add-countdown">
+                <button class="add-btn" id="add-countdown-btn">
+                    <i class="fas fa-plus"></i> Dodaj Nowe Odliczanie
+                </button>
+            </div>
+        </div>
+        
+        <div class="share-section">
+            <h3 class="share-title">Udostępnij swoje odliczanie</h3>
+            <div class="share-input-group">
+                <input type="text" class="share-input" id="share-link" readonly value="https://magiccountdown.pl/">
+                <button class="share-btn" id="copy-link-btn">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+            <div class="social-share">
+                <a href="#" class="social-btn facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-btn twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="countdown-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2 class="modal-title">Dodaj Nowe Odliczanie</h2>
+            <form id="countdown-form">
+                <div class="form-group">
+                    <label for="event-name" class="form-label">Nazwa Wydarzenia</label>
+                    <input type="text" id="event-name" class="form-input" placeholder="Np. Moje Wesele" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-date" class="form-label">Data Wydarzenia</label>
+                    <input type="datetime-local" id="event-date" class="form-input" required>
+                </div>
+                <button type="submit" class="submit-btn">Dodaj Odliczanie</button>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 Magic Countdown | Stworzone z ❤️ dla osób, które nie mogą się doczekać</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Inicjalizacja cząsteczek w tle
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Odliczanie do wakacji (przykładowa data - 1 lipca 2024)
+            const summerVacation = new Date('July 1, 2024 00:00:00').getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = summerVacation - now;
+                
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                
+                if (distance < 0) {
+                    clearInterval(countdownTimer);
+                    document.getElementById('main-countdown').innerHTML = '<div style="text-align: center; font-size: 1.5rem;">WAKACJE TRWAJĄ!</div>';
+                }
+            }
+            
+            updateCountdown();
+            const countdownTimer = setInterval(updateCountdown, 1000);
+            
+            // Obsługa modalnego formularza
+            const modal = document.getElementById('countdown-modal');
+            const addBtn = document.getElementById('add-countdown-btn');
+            const closeBtn = document.getElementById('close-modal');
+            const form = document.getElementById('countdown-form');
+            
+            addBtn.addEventListener('click', () => {
+                modal.classList.add('active');
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+            
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+            
+            // Zapisywanie odliczań w localStorage
+            function saveCountdown(event) {
+                event.preventDefault();
+                
+                const eventName = document.getElementById('event-name').value;
+                const eventDate = document.getElementById('event-date').value;
+                
+                if (!eventName || !eventDate) return;
+                
+                // Generowanie unikalnego ID
+                const id = 'countdown-' + Date.now();
+                
+                const countdown = {
+                    id,
+                    name: eventName,
+                    date: new Date(eventDate).getTime()
+                };
+                
+                // Pobierz istniejące odliczania lub utwórz nową tablicę
+                let countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+                
+                // Dodaj nowe odliczanie
+                countdowns.push(countdown);
+                
+                // Zapisz w localStorage
+                localStorage.setItem('countdowns', JSON.stringify(countdowns));
+                
+                // Wygeneruj link udostępniania
+                generateShareLink(id);
+                
+                // Odśwież listę odliczań
+                loadCountdowns();
+                
+                // Zamknij modal i wyczyść formularz
+                modal.classList.remove('active');
+                form.reset();
+            }
+            
+            form.addEventListener('submit', saveCountdown);
+            
+            // Ładowanie zapisanych odliczań
+            function loadCountdowns() {
+                const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+                const container = document.getElementById('custom-countdowns');
+                
+                container.innerHTML = '';
+                
+                if (countdowns.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; grid-column: 1 / -1;">Brak zapisanych odliczań. Dodaj pierwsze!</p>';
+                    return;
+                }
+                
+                countdowns.forEach(countdown => {
+                    const card = document.createElement('div');
+                    card.className = 'countdown-card';
+                    card.dataset.id = countdown.id;
+                    
+                    const now = new Date().getTime();
+                    const distance = countdown.date - now;
+                    
+                    let countdownHTML;
+                    
+                    if (distance < 0) {
+                        countdownHTML = `
+                            <div style="text-align: center;">
+                                <h3 class="card-title">${countdown.name}</h3>
+                                <p class="card-date">${new Date(countdown.date).toLocaleString()}</p>
+                                <div style="font-size: 1.2rem; color: var(--success);">WYDARZENIE MINĘŁO!</div>
+                                <button class="delete-btn" style="margin-top: 1rem; background: var(--warning); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">Usuń</button>
+                            </div>
+                        `;
+                    } else {
+                        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                        
+                        countdownHTML = `
+                            <h3 class="card-title">${countdown.name}</h3>
+                            <p class="card-date">${new Date(countdown.date).toLocaleString()}</p>
+                            <div class="card-countdown">
+                                <div class="card-countdown-item">
+                                    <div class="card-countdown-value">${days}</div>
+                                    <div class="card-countdown-label">Dni</div>
+                                </div>
+                                <div class="card-countdown-item">
+                                    <div class="card-countdown-value">${hours}</div>
+                                    <div class="card-countdown-label">Godzin</div>
+                                </div>
+                                <div class="card-countdown-item">
+                                    <div class="card-countdown-value">${minutes}</div>
+                                    <div class="card-countdown-label">Minut</div>
+                                </div>
+                            </div>
+                            <button class="delete-btn" style="margin-top: 1rem; background: rgba(255, 255, 255, 0.1); color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer; width: 100%;">Usuń</button>
+                        `;
+                    }
+                    
+                    card.innerHTML = countdownHTML;
+                    container.appendChild(card);
+                    
+                    // Dodaj obsługę usuwania
+                    const deleteBtn = card.querySelector('.delete-btn');
+                    deleteBtn.addEventListener('click', () => {
+                        deleteCountdown(countdown.id);
+                    });
+                });
+                
+                // Uruchom odliczanie dla każdej karty
+                startCustomCountdowns();
+            }
+            
+            // Usuwanie odliczania
+            function deleteCountdown(id) {
+                let countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+                countdowns = countdowns.filter(c => c.id !== id);
+                localStorage.setItem('countdowns', JSON.stringify(countdowns));
+                loadCountdowns();
+            }
+            
+            // Odliczanie dla własnych wydarzeń
+            function startCustomCountdowns() {
+                const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+                
+                countdowns.forEach(countdown => {
+                    const now = new Date().getTime();
+                    const distance = countdown.date - now;
+                    
+                    if (distance > 0) {
+                        const card = document.querySelector(`.countdown-card[data-id="${countdown.id}"]`);
+                        if (card) {
+                            const daysEl = card.querySelector('.card-countdown-value:nth-child(1)');
+                            const hoursEl = card.querySelector('.card-countdown-value:nth-child(2)');
+                            const minutesEl = card.querySelector('.card-countdown-value:nth-child(3)');
+                            
+                            const update = () => {
+                                const now = new Date().getTime();
+                                const distance = countdown.date - now;
+                                
+                                if (distance > 0) {
+                                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                                    
+                                    if (daysEl) daysEl.textContent = days;
+                                    if (hoursEl) hoursEl.textContent = hours;
+                                    if (minutesEl) minutesEl.textContent = minutes;
+                                } else {
+                                    // Wydarzenie minęło - odśwież kartę
+                                    loadCountdowns();
+                                }
+                            };
+                            
+                            update();
+                            setInterval(update, 60000); // Aktualizuj co minutę
+                        }
+                    }
+                });
+            }
+            
+            // Generowanie linku udostępniania
+            function generateShareLink(id) {
+                const shareLink = `https://magiccountdown.pl/?countdown=${id}`;
+                document.getElementById('share-link').value = shareLink;
+                
+                // Aktualizuj linki udostępniania w mediach społecznościowych
+                const encodedUrl = encodeURIComponent(shareLink);
+                const text = encodeURIComponent("Sprawdź moje odliczanie na Magic Countdown!");
+                
+                document.querySelector('.social-btn.facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+                document.querySelector('.social-btn.twitter').href = `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${text}`;
+                document.querySelector('.social-btn.whatsapp').href = `https://wa.me/?text=${text}%20${encodedUrl}`;
+            }
+            
+            // Kopiowanie linku
+            document.getElementById('copy-link-btn').addEventListener('click', () => {
+                const shareInput = document.getElementById('share-link');
+                shareInput.select();
+                document.execCommand('copy');
+                
+                // Animacja potwierdzenia
+                const btn = document.getElementById('copy-link-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-copy"></i>';
+                }, 2000);
+            });
+            
+            // Sprawdź URL pod kątem parametru countdown
+            function checkUrlForCountdown() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const countdownId = urlParams.get('countdown');
+                
+                if (countdownId) {
+                    const countdowns = JSON.parse(localStorage.getItem('countdowns')) || [];
+                    const countdown = countdowns.find(c => c.id === countdownId);
+                    
+                    if (countdown) {
+                        // Wyświetl to odliczanie na górze strony
+                        document.getElementById('main-countdown').innerHTML = `
+                            <div style="text-align: center; width: 100%;">
+                                <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">${countdown.name}</h3>
+                                <div style="display: flex; justify-content: center; gap: 1.5rem;">
+                                    <div class="countdown-item">
+                                        <div class="countdown-value" id="shared-days">00</div>
+                                        <div class="countdown-label">Dni</div>
+                                    </div>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value" id="shared-hours">00</div>
+                                        <div class="countdown-label">Godzin</div>
+                                    </div>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value" id="shared-minutes">00</div>
+                                        <div class="countdown-label">Minut</div>
+                                    </div>
+                                    <div class="countdown-item">
+                                        <div class="countdown-value" id="shared-seconds">00</div>
+                                        <div class="countdown-label">Sekund</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Uruchom odliczanie
+                        const updateSharedCountdown = () => {
+                            const now = new Date().getTime();
+                            const distance = countdown.date - now;
+                            
+                            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            
+                            document.getElementById('shared-days').textContent = days.toString().padStart(2, '0');
+                            document.getElementById('shared-hours').textContent = hours.toString().padStart(2, '0');
+                            document.getElementById('shared-minutes').textContent = minutes.toString().padStart(2, '0');
+                            document.getElementById('shared-seconds').textContent = seconds.toString().padStart(2, '0');
+                            
+                            if (distance < 0) {
+                                clearInterval(sharedTimer);
+                                document.getElementById('main-countdown').innerHTML = `
+                                    <div style="text-align: center; width: 100%;">
+                                        <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">${countdown.name}</h3>
+                                        <div style="font-size: 1.2rem; color: var(--success);">WYDARZENIE MINĘŁO!</div>
+                                    </div>
+                                `;
+                            }
+                        };
+                        
+                        updateSharedCountdown();
+                        const sharedTimer = setInterval(updateSharedCountdown, 1000);
+                    }
+                }
+            }
+            
+            // Załaduj odliczania przy starcie
+            loadCountdowns();
+            checkUrlForCountdown();
+        });
+    </script>
 </body>
 </html>
