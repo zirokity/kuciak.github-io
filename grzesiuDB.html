@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moje Linki</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .file {
+            border: 1px solid #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .file:hover {
+            background-color: rgba(0, 255, 0, 0.05);
+        }
+        .file-name {
+            font-weight: bold;
+        }
+        .links {
+            display: none;
+            margin-top: 10px;
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+        }
+        .link {
+            display: block;
+            color: #0f0;
+            text-decoration: none;
+            padding: 5px 0;
+        }
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- TUTAJ DODAJ SWOJE PLIKI -->
+        <div class="file" onclick="toggleLinks(this)">
+            <div class="file-name">1.txt</div>
+            <div class="links">
+                <!-- TUTAJ DODAJ SWOJE LINKI -->
+                <a href="https://example.com" class="link" target="_blank">Przykładowy link 1</a>
+                <a href="https://example.com" class="link" target="_blank">Przykładowy link 2</a>
+            </div>
+        </div>
+
+        <div class="file" onclick="toggleLinks(this)">
+            <div class="file-name">2.txt</div>
+            <div class="links">
+                <!-- TUTAJ DODAJ SWOJE LINKI -->
+                <a href="https://example.com" class="link" target="_blank">Inny link 1</a>
+                <a href="https://example.com" class="link" target="_blank">Inny link 2</a>
+            </div>
+        </div>
+        <!-- KONIEC PLIKÓW -->
+    </div>
+
+    <script>
+        function toggleLinks(fileElement) {
+            const links = fileElement.querySelector('.links');
+            links.style.display = links.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
