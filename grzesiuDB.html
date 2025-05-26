@@ -78,6 +78,7 @@
             margin-bottom: 5px;
             color: var(--text-color);
             text-decoration: none;
+            word-break: break-all;
         }
         
         .link-item:hover {
@@ -109,32 +110,30 @@
     <!-- TUTAJ DODAJ SWOJE LINKI DLA POSZCZEGÓLNYCH PLIKÓW -->
     <div class="fullscreen-file" id="file-1">
         <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
-        <h2>1.txt</h2>
         <div class="links-container">
-            <!-- TUTAJ DODAJ SWOJE LINKI -->
-            <a href="https://soundcloud.com/chcebycnastepny" class="link-item" target="_blank">SoundCloud 1</a>
-            <a href="https://twojlink2.com" class="link-item" target="_blank">Twój link 2</a>
+            <!-- TUTAJ WKLEJ SWOJE LINKI -->
+            https://example.com/link1
+            https://example.com/link2
+            mailto:twoj@email.com
             <!-- DODAJ WIĘCEJ LINKÓW WEDŁUG POTRZEB -->
         </div>
     </div>
 
     <div class="fullscreen-file" id="file-2">
         <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
-        <h2>2.txt</h2>
         <div class="links-container">
-            <!-- TUTAJ DODAJ SWOJE LINKI -->
-            <a href="https://twojlink3.com" class="link-item" target="_blank">Twój link 3</a>
-            <a href="https://twojlink4.com" class="link-item" target="_blank">Twój link 4</a>
+            <!-- TUTAJ WKLEJ SWOJE LINKI -->
+            https://example.com/link3
+            https://example.com/link4
         </div>
     </div>
 
     <div class="fullscreen-file" id="file-3">
         <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
-        <h2>3.txt</h2>
         <div class="links-container">
-            <!-- TUTAJ DODAJ SWOJE LINKI -->
-            <a href="mailto:twoj@email.com" class="link-item">Twój email</a>
-            <a href="https://twojlink5.com" class="link-item" target="_blank">Twój link 5</a>
+            <!-- TUTAJ WKLEJ SWOJE LINKI -->
+            https://example.com/link5
+            https://example.com/link6
         </div>
     </div>
 
@@ -142,6 +141,9 @@
         function openFullscreen(fileNumber) {
             document.getElementById(`file-${fileNumber}`).style.display = 'block';
             document.body.style.overflow = 'hidden';
+            
+            // Automatycznie konwertuj linki na klikalne
+            convertLinksToClickable(fileNumber);
         }
         
         function closeFullscreen() {
@@ -149,6 +151,20 @@
                 file.style.display = 'none';
             });
             document.body.style.overflow = 'auto';
+        }
+        
+        // Funkcja konwertująca zwykły tekst na klikalne linki
+        function convertLinksToClickable(fileNumber) {
+            const container = document.querySelector(`#file-${fileNumber} .links-container`);
+            const text = container.innerHTML;
+            
+            // Regex do wykrywania URL-i
+            const urlRegex = /(https?:\/\/[^\s]+|mailto:[^\s]+)/g;
+            
+            // Zamień tekstowe linki na klikalne
+            container.innerHTML = text.replace(urlRegex, function(url) {
+                return `<a href="${url}" class="link-item" target="_blank">${url}</a>`;
+            });
         }
         
         // Zamykanie klawiszem ESC
