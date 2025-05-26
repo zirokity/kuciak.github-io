@@ -10,8 +10,6 @@
             --text-color: #00ff00;
             --border-color: #333;
             --highlight: #00cc00;
-            --modal-bg: rgba(10, 10, 10, 0.98);
-            --selection-color: rgba(0, 255, 0, 0.2);
         }
         
         body {
@@ -21,11 +19,6 @@
             margin: 0;
             padding: 20px;
             line-height: 1.6;
-            cursor: default;
-        }
-        
-        ::selection {
-            background: var(--selection-color);
         }
         
         .container {
@@ -40,514 +33,129 @@
             padding-bottom: 20px;
         }
         
-        .settings {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 100;
-        }
-        
-        .settings-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 5px 10px;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        
-        .settings-panel {
-            display: none;
-            position: absolute;
-            top: 30px;
-            right: 0;
-            background: var(--modal-bg);
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            width: 200px;
-        }
-        
-        .settings-panel.show {
-            display: block;
-        }
-        
-        .setting-item {
-            margin-bottom: 10px;
-        }
-        
-        .setting-label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        
-        .files-list {
-            margin-bottom: 30px;
-        }
-        
         .file {
             margin-bottom: 10px;
             border: 1px solid var(--border-color);
             padding: 10px;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
         
-        .file.with-effects:hover {
+        .file:hover {
             background-color: rgba(0, 255, 0, 0.05);
-            border-color: var(--highlight);
-        }
-        
-        .file.with-effects::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
-            transition: 0.5s;
-        }
-        
-        .file.with-effects:hover::before {
-            left: 100%;
-        }
-        
-        .file-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         
         .file-name {
             font-weight: bold;
         }
         
-        .file-size {
-            color: #666;
-            font-size: 0.8em;
-        }
-        
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.8em;
-            color: #666;
-            border-top: 1px dashed var(--border-color);
-            padding-top: 20px;
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        .cursor {
-            animation: blink 1s infinite;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            background: var(--modal-bg);
-            border: 1px solid var(--highlight);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-            padding: 20px;
-            z-index: 1000;
-            overflow-y: auto;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal.show {
-            opacity: 1;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed var(--border-color);
-        }
-
-        .modal-title {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: var(--highlight);
-        }
-
-        .close-modal {
-            cursor: pointer;
-            color: var(--highlight);
-            font-size: 1.5em;
-            transition: transform 0.3s;
-        }
-        
-        .close-modal.with-effects:hover {
-            transform: rotate(90deg);
-        }
-
-        .links-container {
-            margin-top: 15px;
-        }
-
-        .link-item {
-            display: block;
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            color: var(--text-color);
-            text-decoration: none;
-            border-left: 3px solid transparent;
-            transition: all 0.3s;
-            word-break: break-all;
-            background: rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .link-item.with-effects::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
-            transition: 0.5s;
-        }
-        
-        .link-item.with-effects:hover {
-            border-left: 3px solid var(--highlight);
-            background: rgba(0, 255, 0, 0.05);
-            padding-left: 20px;
-        }
-        
-        .link-item.with-effects:hover::before {
-            left: 100%;
-        }
-
-        .overlay {
+        .fullscreen-file {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 999;
+            background: var(--bg-color);
+            padding: 20px;
+            z-index: 100;
+            overflow-y: auto;
         }
         
-        .overlay.with-effects {
-            backdrop-filter: blur(3px);
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            cursor: pointer;
+            color: var(--highlight);
         }
         
-        .overlay.show {
+        .links-container {
+            margin-top: 20px;
+        }
+        
+        .link-item {
             display: block;
+            padding: 10px;
+            margin-bottom: 5px;
+            color: var(--text-color);
+            text-decoration: none;
         }
         
-        /* Responsywność */
-        @media (max-width: 600px) {
-            .modal {
-                width: 95%;
-                padding: 15px;
-            }
-            
-            .link-item {
-                padding: 10px 12px;
-            }
+        .link-item:hover {
+            background-color: rgba(0, 255, 0, 0.1);
         }
     </style>
 </head>
 <body>
-    <div class="settings">
-        <button class="settings-btn">⚙️ Ustawienia</button>
-        <div class="settings-panel">
-            <div class="setting-item">
-                <label class="setting-label">
-                    <input type="checkbox" id="effects-toggle" checked> Efekty specjalne
-                </label>
-            </div>
-            <div class="setting-item">
-                <label class="setting-label">
-                    <input type="checkbox" id="typing-toggle" checked> Animacja pisania
-                </label>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1>root@kuciak:~$ ls -l</h1>
             <p>total 4</p>
         </div>
         
-        <div class="files-list">
-            <!-- Pliki będą generowane przez JavaScript -->
+        <!-- TUTAJ DODAJ SWOJE PLIKI -->
+        <div class="file" onclick="openFullscreen('1')">
+            <div class="file-name">1.txt</div>
         </div>
         
-        <div class="footer">
-            root@kuciak:~$ <span class="cursor">_</span>
+        <div class="file" onclick="openFullscreen('2')">
+            <div class="file-name">2.txt</div>
+        </div>
+        
+        <div class="file" onclick="openFullscreen('3')">
+            <div class="file-name">3.txt</div>
         </div>
     </div>
 
-    <!-- Overlay -->
-    <div class="overlay" id="overlay"></div>
-
-    <!-- Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-header">
-            <div class="modal-title" id="modal-title">modal.txt</div>
-            <div class="close-modal">&times;</div>
+    <!-- TUTAJ DODAJ SWOJE LINKI DLA POSZCZEGÓLNYCH PLIKÓW -->
+    <div class="fullscreen-file" id="file-1">
+        <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
+        <h2>1.txt</h2>
+        <div class="links-container">
+            <!-- TUTAJ DODAJ SWOJE LINKI -->
+            <a href="https://twojlink1.com" class="link-item" target="_blank">Twój link 1</a>
+            <a href="https://twojlink2.com" class="link-item" target="_blank">Twój link 2</a>
+            <!-- DODAJ WIĘCEJ LINKÓW WEDŁUG POTRZEB -->
         </div>
-        <div class="links-container" id="links-container">
-            <!-- Linki będą dodane przez JavaScript -->
+    </div>
+
+    <div class="fullscreen-file" id="file-2">
+        <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
+        <h2>2.txt</h2>
+        <div class="links-container">
+            <!-- TUTAJ DODAJ SWOJE LINKI -->
+            <a href="https://twojlink3.com" class="link-item" target="_blank">Twój link 3</a>
+            <a href="https://twojlink4.com" class="link-item" target="_blank">Twój link 4</a>
+        </div>
+    </div>
+
+    <div class="fullscreen-file" id="file-3">
+        <div class="back-button" onclick="closeFullscreen()">← Wróć</div>
+        <h2>3.txt</h2>
+        <div class="links-container">
+            <!-- TUTAJ DODAJ SWOJE LINKI -->
+            <a href="mailto:twoj@email.com" class="link-item">Twój email</a>
+            <a href="https://twojlink5.com" class="link-item" target="_blank">Twój link 5</a>
         </div>
     </div>
 
     <script>
-        // Konfiguracja - TUTAJ DODAWAJ SWOJE LINKI
-        const filesConfig = [
-            {
-                name: "1.txt",
-                size: "1.2KB",
-                links: [
-                    { name: "YouTube", url: "https://youtube.com" },
-                    { name: "Twitch", url: "https://twitch.tv" },
-                    { name: "Vimeo", url: "https://vimeo.com" }
-                ]
-            },
-            {
-                name: "2.txt",
-                size: "0.8KB",
-                links: [
-                    { name: "Twitter", url: "https://twitter.com" },
-                    { name: "Instagram", url: "https://instagram.com" },
-                    { name: "Facebook", url: "https://facebook.com" }
-                ]
-            },
-            {
-                name: "3.txt",
-                size: "1.5KB",
-                links: [
-                    { name: "Email", url: "mailto:przyklad@email.com" },
-                    { name: "Formularz", url: "https://forms.example.com" },
-                    { name: "Discord", url: "https://discord.gg/example" }
-                ]
-            }
-        ];
+        function openFullscreen(fileNumber) {
+            document.getElementById(`file-${fileNumber}`).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
         
-        // Ustawienia
-        let settings = {
-            effects: true,
-            typingAnimation: true
-        };
+        function closeFullscreen() {
+            document.querySelectorAll('.fullscreen-file').forEach(file => {
+                file.style.display = 'none';
+            });
+            document.body.style.overflow = 'auto';
+        }
         
-        // Inicjalizacja strony
-        document.addEventListener('DOMContentLoaded', function() {
-            const filesList = document.querySelector('.files-list');
-            const modal = document.getElementById('modal');
-            const modalTitle = document.getElementById('modal-title');
-            const linksContainer = document.getElementById('links-container');
-            const overlay = document.getElementById('overlay');
-            const closeModalBtn = document.querySelector('.close-modal');
-            const settingsBtn = document.querySelector('.settings-btn');
-            const settingsPanel = document.querySelector('.settings-panel');
-            const effectsToggle = document.getElementById('effects-toggle');
-            const typingToggle = document.getElementById('typing-toggle');
-            
-            // Ładowanie ustawień z localStorage
-            function loadSettings() {
-                const savedSettings = localStorage.getItem('terminalSettings');
-                if (savedSettings) {
-                    settings = JSON.parse(savedSettings);
-                }
-                effectsToggle.checked = settings.effects;
-                typingToggle.checked = settings.typingAnimation;
-                applySettings();
+        // Zamykanie klawiszem ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFullscreen();
             }
-            
-            // Zastosowanie ustawień
-            function applySettings() {
-                document.body.classList.toggle('with-effects', settings.effects);
-                document.querySelectorAll('.file, .link-item, .close-modal, .overlay').forEach(el => {
-                    el.classList.toggle('with-effects', settings.effects);
-                });
-                
-                if (settings.typingAnimation) {
-                    startTypingAnimation();
-                } else {
-                    stopTypingAnimation();
-                }
-            }
-            
-            // Zapisywanie ustawień
-            function saveSettings() {
-                localStorage.setItem('terminalSettings', JSON.stringify(settings));
-            }
-            
-            // Generowanie plików
-            function generateFiles() {
-                filesList.innerHTML = '';
-                filesConfig.forEach((file, index) => {
-                    const fileElement = document.createElement('div');
-                    fileElement.className = 'file';
-                    fileElement.dataset.index = index;
-                    
-                    fileElement.innerHTML = `
-                        <div class="file-header">
-                            <span class="file-name">${file.name}</span>
-                            <span class="file-size">${file.size}</span>
-                        </div>
-                    `;
-                    
-                    fileElement.addEventListener('click', () => openModal(index));
-                    filesList.appendChild(fileElement);
-                });
-            }
-            
-            // Otwieranie modala
-            function openModal(fileIndex) {
-                const file = filesConfig[fileIndex];
-                modalTitle.textContent = file.name;
-                linksContainer.innerHTML = '';
-                
-                file.links.forEach(link => {
-                    const linkElement = document.createElement('a');
-                    linkElement.href = link.url;
-                    linkElement.className = 'link-item';
-                    linkElement.textContent = link.name;
-                    linkElement.target = '_blank';
-                    linksContainer.appendChild(linkElement);
-                });
-                
-                overlay.classList.add('show');
-                modal.style.display = 'block';
-                setTimeout(() => modal.classList.add('show'), 10);
-                document.body.style.overflow = 'hidden';
-            }
-            
-            // Zamykanie modala
-            function closeModal() {
-                modal.classList.remove('show');
-                setTimeout(() => {
-                    modal.style.display = 'none';
-                    overlay.classList.remove('show');
-                    document.body.style.overflow = 'auto';
-                }, 300);
-            }
-            
-            // Efekt pisania w stopce
-            let typingInterval;
-            const commands = [
-                "cd ~/links",
-                "git pull",
-                "ls -la",
-                "cat about.txt",
-                "sudo make me a sandwich"
-            ];
-            
-            function startTypingAnimation() {
-                let currentCommand = 0;
-                const cursor = document.querySelector('.cursor');
-                
-                function typeCommand() {
-                    const footer = document.querySelector('.footer');
-                    const text = `root@kuciak:~$ ${commands[currentCommand]}`;
-                    let i = 0;
-                    
-                    footer.innerHTML = '';
-                    cursor.style.display = 'none';
-                    
-                    function typing() {
-                        if (i < text.length) {
-                            footer.innerHTML += text.charAt(i);
-                            i++;
-                            setTimeout(typing, 50 + Math.random() * 50);
-                        } else {
-                            cursor.style.display = 'inline';
-                            setTimeout(eraseCommand, 2000);
-                        }
-                    }
-                    
-                    typing();
-                }
-                
-                function eraseCommand() {
-                    const footer = document.querySelector('.footer');
-                    const text = footer.textContent;
-                    let i = text.length;
-                    
-                    cursor.style.display = 'none';
-                    
-                    function erasing() {
-                        if (i > 0) {
-                            footer.textContent = text.substring(0, i - 1);
-                            i--;
-                            setTimeout(erasing, 30);
-                        } else {
-                            cursor.style.display = 'inline';
-                            currentCommand = (currentCommand + 1) % commands.length;
-                            setTimeout(typeCommand, 500);
-                        }
-                    }
-                    
-                    erasing();
-                }
-                
-                typeCommand();
-                typingInterval = setInterval(typeCommand, commands.length * 5000);
-            }
-            
-            function stopTypingAnimation() {
-                clearInterval(typingInterval);
-                const footer = document.querySelector('.footer');
-                footer.innerHTML = `root@kuciak:~$ <span class="cursor">_</span>`;
-            }
-            
-            // Event listeners
-            closeModalBtn.addEventListener('click', closeModal);
-            overlay.addEventListener('click', closeModal);
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
-            });
-            
-            settingsBtn.addEventListener('click', function() {
-                settingsPanel.classList.toggle('show');
-            });
-            
-            effectsToggle.addEventListener('change', function() {
-                settings.effects = this.checked;
-                applySettings();
-                saveSettings();
-            });
-            
-            typingToggle.addEventListener('change', function() {
-                settings.typingAnimation = this.checked;
-                if (this.checked) {
-                    startTypingAnimation();
-                } else {
-                    stopTypingAnimation();
-                }
-                saveSettings();
-            });
-            
-            // Inicjalizacja
-            loadSettings();
-            generateFiles();
-            applySettings();
         });
     </script>
 </body>
